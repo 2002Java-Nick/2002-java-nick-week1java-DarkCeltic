@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class EvaluationService {
 	 */
 	public String reverse(String string) {
 		char[] reversed = new char[string.length()];
-		for (int i = reversed.length - 1, j=0; i >= 0; i--, j++) {
+		for (int i = reversed.length - 1, j = 0; i >= 0; i--, j++) {
 			reversed[j] = string.charAt(i);
 		}
 		return new String(reversed);
@@ -30,8 +31,18 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+
+		String acr = "";
+		acr += phrase.charAt(0);
+		int i = 1;
+		while (i <= phrase.length()) {
+			i = phrase.indexOf(" ") + 1;
+			acr += phrase.charAt(i);
+			phrase = phrase.substring(i);
+			i++;
+		}
+//
+		return acr;
 	}
 
 	/**
@@ -84,18 +95,24 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if (sideOne == sideTwo && sideOne == sideThree && sideTwo == sideThree)
+				return true;
+			else
+				return false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if (sideOne == sideTwo || sideOne == sideThree || sideTwo == sideThree)
+				return true;
+			else
+				return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			if (sideOne != sideTwo && sideOne != sideThree && sideTwo != sideThree)
+				return true;
+			else
+				return false;
 		}
 
 	}
@@ -116,8 +133,43 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		int sum = 0;
+		string = string.toUpperCase();
+		for (int i = 0; i < string.length(); i++) {
+			switch (string.charAt(i)) {
+			case 'D':
+			case 'G':
+				sum += 2;
+				break;
+			case 'B':
+			case 'C':
+			case 'M':
+			case 'P':
+				sum += 3;
+				break;
+			case 'F':
+			case 'H':
+			case 'V':
+			case 'W':
+			case 'Y':
+				sum += 4;
+				break;
+			case 'K':
+				sum += 5;
+				break;
+			case 'J':
+			case 'X':
+				sum += 8;
+				break;
+			case 'Q':
+			case 'Z':
+				sum += 10;
+				break;
+			default:
+				sum += 1;
+			}
+		}
+		return sum;
 	}
 
 	/**
@@ -152,8 +204,13 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		string = string.replaceAll("[^\\d]", "");
+		if (string.charAt(0) == 1)
+			string = string.substring(1);
+		if (string.length() > 10 || string.length() < 10)
+			throw new IllegalArgumentException();
+		else
+			return string;
 	}
 
 	/**
@@ -166,8 +223,20 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+
+		int count = 0;
+		Map<String, Integer> wordNumber = new HashMap<String, Integer>();
+
+		String[] words = string.split("\\s+|,\\s*|\\.\\s*");
+
+		for (int i = 0; i < words.length; i++) {
+			if (wordNumber.containsKey(words[i])) {
+				count = wordNumber.get(words[i]);
+				wordNumber.replace(words[i], count, count + 1);
+			} else
+				wordNumber.put(words[i], 1);
+		}
+		return wordNumber;
 	}
 
 	/**
@@ -537,8 +606,39 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		int num1 = 0;
+		int num2 = 0;
+		String operator = " ";
+		int total = 0;
+
+		String[] words = string.split(" |\\?");
+
+		for (int i = 0; i < words.length; i++) {
+			try {
+				num1 = Integer.parseInt(words[i]);
+				operator = words[++i];
+				break;
+
+			} catch (Exception e) {
+
+			}
+		}
+		num2 = Integer.parseInt(words[words.length - 1]);
+		switch (operator) {
+		case "plus":
+			total = num1 + num2;
+			break;
+		case "minus":
+			total = num1 - num2;
+			break;
+		case "multiplied":
+			total = num1 * num2;
+			break;
+		case "divided":
+			total = num1 / num2;
+			break;
+		}
+		return total;
 	}
 
 }
