@@ -36,8 +36,8 @@ public class EvaluationService {
 		String acr = "";
 		acr += phrase.charAt(0);
 		for (int i = 1; i < phrase.length(); i++) {
-			if(phrase.charAt(i) == ' '|| phrase.charAt(i) == '-') {
-				acr += phrase.charAt(i+1);
+			if (phrase.charAt(i) == ' ' || phrase.charAt(i) == '-') {
+				acr += phrase.charAt(i + 1);
 			}
 		}
 		acr = acr.toUpperCase();
@@ -599,8 +599,46 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		
+//		046 454 286
+		int[] numToValidate = new int[string.length()];
+//		ArrayList<Integer> numToValidate  = new ArrayList<Integer>();
+		
+		int sum = 0;
+		for (int i = 0; i < string.length(); i++) {
+			if (string.charAt(i) == ' ' || string.charAt(i) == '-') {
+				i++;
+			}
+			try {
+				numToValidate[i] = (int)string.charAt(i);
+//				numToValidate.add((int) string.charAt(i));
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		System.out.println("This is the 2 position in the string: "+string.charAt(1));
+		System.out.println("This is the 2 position in the arrray:  "+numToValidate[1]);
+		
+		for(int x: numToValidate) {
+			System.out.println(x);
+		}
+		
+		
+		
+		for (int i = numToValidate.length - 1; i == 0; i -= 2) {
+			numToValidate[i] *= numToValidate[i];
+			if (numToValidate[i] > 10) {
+				numToValidate[i] -= 9;
+			}
+		}
+		for (int i = 0; i < numToValidate.length; i++) {
+			sum += numToValidate[i];
+		}
+		if (sum % 10 == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
