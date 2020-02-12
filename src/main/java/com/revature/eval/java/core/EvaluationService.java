@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,14 +35,12 @@ public class EvaluationService {
 
 		String acr = "";
 		acr += phrase.charAt(0);
-		int i = 1;
-		while (i <= phrase.length()) {
-			i = phrase.indexOf(" ") + 1;
-			acr += phrase.charAt(i);
-			phrase = phrase.substring(i);
-			i++;
+		for (int i = 1; i < phrase.length(); i++) {
+			if(phrase.charAt(i) == ' '|| phrase.charAt(i) == '-') {
+				acr += phrase.charAt(i+1);
+			}
 		}
-//
+		acr = acr.toUpperCase();
 		return acr;
 	}
 
@@ -335,8 +334,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		ArrayList<Integer> values = new ArrayList<Integer>();
+		int temp = input;
+		int sum = 0;
+		while (temp != 0) {
+			values.add(temp % 10);
+			temp /= 10;
+		}
+		for (int i = 0; i < values.size(); i++) {
+			sum += Math.pow(values.get(i), values.size());
+		}
+		if (sum == input) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -350,8 +362,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> primeNumbers = new ArrayList<Long>();
+		while (l % 2 == 0) {
+			primeNumbers.add(2L);
+			l /= 2;
+		}
+		for (int i = 3; i <= Math.sqrt(l); i += 2) {
+			while (l % i == 0) {
+				primeNumbers.add((long) i);
+				l /= i;
+			}
+		}
+		if (l > 2) {
+			primeNumbers.add(l);
+		}
+		return primeNumbers;
 	}
 
 	/**
