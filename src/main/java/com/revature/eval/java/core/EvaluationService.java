@@ -509,8 +509,35 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		string = string.replaceAll("-", "");
+		int[] values = new int[string.length()];
+		int sum = 0;
+		int x = 10;
+		for (int i = 0; i < string.length(); i++) {
+			if (Character.isLetter(string.charAt(i))) {
+				if (string.charAt(i) == 'x' || string.charAt(i) == 'X') {
+					values[i] = 10;
+				} else {
+					return false;
+				}
+			} else {
+				values[i] = Character.getNumericValue(string.charAt(i));
+			}
+		}
+		for (int i = 0; i < values.length; i++) {
+			sum += values[i] * x;
+			x--;
+			System.out.println(sum);
+		}
+//		for(int c : values) {
+//			System.out.println(sum);
+//		}
+		if (sum % 11 == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**
@@ -599,41 +626,34 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		
-//		046 454 286
-		int[] numToValidate = new int[string.length()];
-//		ArrayList<Integer> numToValidate  = new ArrayList<Integer>();
-		
+		ArrayList<Integer> numToValidate = new ArrayList<Integer>();
+
 		int sum = 0;
+		int temp = 0;
 		for (int i = 0; i < string.length(); i++) {
 			if (string.charAt(i) == ' ' || string.charAt(i) == '-') {
 				i++;
 			}
 			try {
-				numToValidate[i] = (int)string.charAt(i);
-//				numToValidate.add((int) string.charAt(i));
+				numToValidate.add(Character.getNumericValue(string.charAt(i)));
 			} catch (Exception e) {
 				return false;
 			}
 		}
-		System.out.println("This is the 2 position in the string: "+string.charAt(1));
-		System.out.println("This is the 2 position in the arrray:  "+numToValidate[1]);
-		
-		for(int x: numToValidate) {
-			System.out.println(x);
-		}
-		
-		
-		
-		for (int i = numToValidate.length - 1; i == 0; i -= 2) {
-			numToValidate[i] *= numToValidate[i];
-			if (numToValidate[i] > 10) {
-				numToValidate[i] -= 9;
+
+		for (int i = numToValidate.size() - 2; i > 0; i -= 2) {
+			temp = numToValidate.get(i) + numToValidate.get(i);
+			numToValidate.set(i, temp);
+			if (numToValidate.get(i) > 10) {
+				temp = numToValidate.get(i) - 9;
+				numToValidate.set(i, temp);
 			}
 		}
-		for (int i = 0; i < numToValidate.length; i++) {
-			sum += numToValidate[i];
+
+		for (int i = 0; i < numToValidate.size(); i++) {
+			sum += numToValidate.get(i);
 		}
+		System.out.println(sum);
 		if (sum % 10 == 0) {
 			return true;
 		} else {
