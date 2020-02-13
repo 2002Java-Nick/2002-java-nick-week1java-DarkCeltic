@@ -2,6 +2,7 @@ package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -278,7 +279,20 @@ public class EvaluationService {
 
 		public int indexOf(T t) {
 			// TODO Write an implementation for this method declaration
-			return 0;
+			int left = 0;
+			int right = sortedList.size() - 1;
+			while (left <= right) {
+				int mid = left + (right - left) / 2;
+				if (sortedList.get(mid).equals(t)) {
+					return mid;
+				}
+				if (sortedList.get(mid).hashCode() < t.hashCode()) {
+					left = mid + 1;
+				} else {
+					right = mid - 1;
+				}
+			}
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -529,13 +543,9 @@ public class EvaluationService {
 			x--;
 			System.out.println(sum);
 		}
-//		for(int c : values) {
-//			System.out.println(sum);
-//		}
 		if (sum % 11 == 0) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
