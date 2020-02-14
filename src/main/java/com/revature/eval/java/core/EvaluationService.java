@@ -1,5 +1,7 @@
 package com.revature.eval.java.core;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
@@ -334,44 +336,25 @@ public class EvaluationService {
 	 */
 	public String toPigLatin(String string) {
 
-		/******************************************************
-		 * TODO Come back to this later, last check not working
-		 *******************************************************/
 		String[] words = string.split(" ");
-		ArrayList<Character> vowels = new ArrayList<Character>(Arrays.asList('a', 'e', 'i', 'o', 'u'));
+		ArrayList<Character> vowels = new ArrayList<Character>(Arrays.asList('a', 'e', 'i', 'o'));
 
 		String temp;
 		int firstVowel = 0;
-		if (words.length > 1) {
-			for (int i = 1; i < words.length; i++) {
-				if (vowels.contains(words[i].charAt(i))) {
-					if (words[i].charAt(i) == 'q' && words[i].charAt(++i) == 'u') {
-						firstVowel = ++i;
-						System.out.println("This should run!!!!!!!!");
-					} else {
-						firstVowel = i;
-					}
-					break;
-				}
-			}
-		} else if (vowels.contains(words[0].charAt(0))) {
+		if (vowels.contains(words[0].charAt(0))) {
 			return string + "ay";
 		} else {
-			for (int i = 1; i < words[0].length(); i++) {
-				if (vowels.contains(words[0].charAt(i))) {
-					firstVowel = i;
-					break;
+			for (int i = 0; i < words.length; i++) {
+				for (int x = 0; x < words[i].length(); x++) {
+					if (vowels.contains(words[i].charAt(x))) {
+						firstVowel = x;
+						break;
+					}
 				}
+				temp = words[i].substring(0, firstVowel);
+				words[i] = words[i].substring(firstVowel, words[i].length());
+				words[i] = words[i] + temp + "ay";
 			}
-		}
-
-		for (int i = 0; i < words.length; i++) {
-			temp = words[i].substring(0, firstVowel);
-//			System.out.println(temp);
-			words[i] = words[i].substring(firstVowel, words[i].length());
-//			System.out.println(words[i]);
-			words[i] = words[i] + temp + "ay";
-//			System.out.println(words[i]);
 		}
 		temp = "";
 		for (int i = 0; i < words.length; i++) {
@@ -381,10 +364,9 @@ public class EvaluationService {
 				temp = words[i];
 			}
 		}
-
-		return temp;
+		return temp.trim();
 	}
-
+	
 	/**
 	 * 9. An Armstrong number is a number that is the sum of its own digits each
 	 * raised to the power of the number of digits.
@@ -741,21 +723,11 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Not working at all
-		if (given.isSupported(ChronoUnit.SECONDS)) {
-			return given.plus(1000000000L, ChronoUnit.SECONDS);
+		if (given instanceof LocalDate) {
+			LocalDateTime time = ((LocalDate) given).atStartOfDay();
+			return time.plusSeconds(1000000000);
 		} else {
-//			String time = given.toString();
-//			time += "T00";
-//
-//			System.out.println(given.toString());
-//			System.out.println(time);
-//			
-
-//			given.ChronoUnit.SECONDS;
-//			((LocalDateTime)given).plusSeconds(1000000000);
-////			Temporal calculateDate = given.plus(1000000000, ChronoUnit.SECONDS);
-			return given.plus(1000000000L, ChronoUnit.SECONDS);
+			return ((LocalDateTime) given).plusSeconds(1000000000);
 		}
 	}
 
